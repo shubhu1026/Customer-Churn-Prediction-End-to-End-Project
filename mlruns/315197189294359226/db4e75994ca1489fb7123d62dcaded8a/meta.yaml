@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/shubh/Desktop/Churn Prediction/mlruns/315197189294359226/db4e75994ca1489fb7123d62dcaded8a/artifacts
+end_time: 1766268699876
+entry_point_name: ''
+experiment_id: '315197189294359226'
+lifecycle_stage: active
+run_id: db4e75994ca1489fb7123d62dcaded8a
+run_name: nebulous-foal-873
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1766268696256
+status: 3
+tags: []
+user_id: shubh

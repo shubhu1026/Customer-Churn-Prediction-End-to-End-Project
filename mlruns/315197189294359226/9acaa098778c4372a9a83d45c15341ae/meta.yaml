@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/shubh/Desktop/Churn Prediction/mlruns/315197189294359226/9acaa098778c4372a9a83d45c15341ae/artifacts
+end_time: 1766268635385
+entry_point_name: ''
+experiment_id: '315197189294359226'
+lifecycle_stage: active
+run_id: 9acaa098778c4372a9a83d45c15341ae
+run_name: efficient-bee-395
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1766268631710
+status: 3
+tags: []
+user_id: shubh

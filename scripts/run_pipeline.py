@@ -30,7 +30,8 @@ def main(args):
     
     """
 
-    project_root = os.path.abspath(os.path.join(os.getcwd(), ".."))
+    project_root = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), ".."))
     mlruns_path = project_root.replace("\\", "/") + "/mlruns"
 
     mlflow.set_tracking_uri(f"file:///{mlruns_path}")
@@ -205,7 +206,7 @@ def main(args):
         # ESSENTIAL: Log model in MLflow's standard format for serving
         mlflow.sklearn.log_model(
             model, 
-            artifact_path="model"  # This creates a 'model/' folder in MLflow run artifacts
+            name="model"  # This creates a 'model/' folder in MLflow run artifacts
         )
         print("Model saved to MLflow for serving pipeline")
 

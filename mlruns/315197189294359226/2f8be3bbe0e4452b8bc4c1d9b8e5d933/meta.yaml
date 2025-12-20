@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/shubh/Desktop/Churn Prediction/mlruns/315197189294359226/2f8be3bbe0e4452b8bc4c1d9b8e5d933/artifacts
+end_time: 1766268667812
+entry_point_name: ''
+experiment_id: '315197189294359226'
+lifecycle_stage: active
+run_id: 2f8be3bbe0e4452b8bc4c1d9b8e5d933
+run_name: kindly-worm-392
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1766268664105
+status: 3
+tags: []
+user_id: shubh

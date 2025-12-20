@@ -1,0 +1,10 @@
+artifact_location: file:///C:/Users/shubh/Desktop/Churn Prediction/mlruns/315197189294359226/models/m-d12d1698b010402bb4e682b603e1980a/artifacts
+creation_timestamp: 1766268696792
+experiment_id: '315197189294359226'
+last_updated_timestamp: 1766268699855
+model_id: m-d12d1698b010402bb4e682b603e1980a
+model_type: null
+name: model
+source_run_id: db4e75994ca1489fb7123d62dcaded8a
+status: 2
+status_message: null
