@@ -10,3 +10,6 @@ python-dotenv
 joblib
 great-expectations
 pytest
+statsmodels
+lightgbm
+xgboost
