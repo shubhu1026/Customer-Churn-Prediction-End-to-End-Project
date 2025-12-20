@@ -1,7 +1,0 @@
-artifact_location: file:///c:/Users/shubh/repos/AI & ML/End to End ML Project/Customer
-  Churn Prediction/mlruns/959031714494657963
-creation_time: 1766213116965
-experiment_id: '959031714494657963'
-last_update_time: 1766213116965
-lifecycle_stage: active
-name: Telco Churn - XGBoost
