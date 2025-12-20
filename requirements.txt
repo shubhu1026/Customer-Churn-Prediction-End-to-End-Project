@@ -13,3 +13,4 @@ pytest
 statsmodels
 lightgbm
 xgboost
+optuna
