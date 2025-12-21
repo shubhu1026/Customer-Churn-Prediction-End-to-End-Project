@@ -206,7 +206,7 @@ def main(args):
         # ESSENTIAL: Log model in MLflow's standard format for serving
         mlflow.sklearn.log_model(
             model, 
-            name="model"  # This creates a 'model/' folder in MLflow run artifacts
+            artifact_path="model"  # This creates a 'model/' folder in MLflow run artifacts
         )
         print("Model saved to MLflow for serving pipeline")
 
