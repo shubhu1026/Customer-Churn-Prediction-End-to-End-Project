@@ -9,7 +9,7 @@ COPY requirements.txt .
 
 # 4. Install Python dependencies (add curl if you use MLflow local tracking URI)
 RUN pip install --upgrade pip \
-    && pip install -r requirements.txt \
+    && pip install --use-feature=fast-deps -r requirements.txt \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # 5. Copy the entire project into the image
@@ -27,7 +27,7 @@ COPY src/serving/model/9ad9b0adcc42425ba89ad1c942c236a6/artifacts/preprocessing.
 # make "serving" and "app" importable without the "src." prefix
 # ensures logs are shown in real-time (no buffering).
 # lets you import modules using from app... instead of from src.app....
-ENV PYTHONUNBUFFERED=1 \ 
+ENV PYTHONUNBUFFERED=1 \
     PYTHONPATH=/app/src
 
 # 6. Expose FastAPI port

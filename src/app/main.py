@@ -18,7 +18,7 @@ from src.serving.inference import predict  # Core ML inference logic
 app = FastAPI(
     title="Telco Customer Churn Prediction API",
     description="ML API for predicting customer churn in telecom industry",
-    version="1.0.0"
+    version="1.0.0",
 )
 
 # === HEALTH CHECK ENDPOINT ===
