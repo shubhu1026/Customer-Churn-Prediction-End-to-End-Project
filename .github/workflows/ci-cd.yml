@@ -6,8 +6,8 @@ on:
       - main
 
 env:
-  DOCKER_IMAGE: shubhu1026/telco-fastapi
-  AWS_REGION: us-east-1
+  DOCKER_IMAGE: shubhu1026/telco-customer-churn
+  AWS_REGION: us-east-2
   ECS_CLUSTER: telco-customer-churn-cluster
   ECS_SERVICE: telco-customer-churn-task-service
 
