@@ -1,0 +1,95 @@
+name: CI/CD – FastAPI ML Service to ECS
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  DOCKER_IMAGE: shubhu1026/telco-fastapi
+  AWS_REGION: us-east-1
+  ECS_CLUSTER: telco-customer-churn-cluster
+  ECS_SERVICE: telco-customer-churn-task-service
+
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # -----------------------------
+      # 1. Checkout repository
+      # -----------------------------
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # -----------------------------
+      # 2. Set up Python for tests
+      # -----------------------------
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      # -----------------------------
+      # 3. Install dependencies
+      # -----------------------------
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest
+
+      # -----------------------------
+      # 4. Run FastAPI + ML tests
+      # -----------------------------
+      - name: Run tests
+        run: |
+          pytest tests/
+
+      # -----------------------------
+      # 5. Set up Docker Buildx
+      # -----------------------------
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # -----------------------------
+      # 6. Login to Docker Hub
+      # -----------------------------
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # -----------------------------
+      # 7. Build & push Docker image
+      # -----------------------------
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            ${{ env.DOCKER_IMAGE }}:latest
+            ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
+
+      # -----------------------------
+      # 8. Configure AWS credentials
+      # -----------------------------
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      # -----------------------------
+      # 9. Deploy to ECS (Fargate)
+      # -----------------------------
+      - name: Deploy to ECS
+        run: |
+          aws ecs update-service \
+            --cluster $ECS_CLUSTER \
+            --service $ECS_SERVICE \
+            --force-new-deployment
