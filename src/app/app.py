@@ -1,108 +1,54 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
 import gradio as gr
-import os
-import sys
 
-# Ensure we can import from src/serving when running "uvicorn src.app.app:app"
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+def dummy_predict(*args):
+    return "🌊 Dummy prediction!"
 
-from serving.inference import predict  # our single source of truth for inference
+with gr.Blocks(theme=gr.themes.Citrus(), title="Telco Churn Predictor") as demo:
 
-app = FastAPI()
+    gr.Markdown("## 📊 Telco Customer Churn Prediction")
+    gr.Markdown("Fill in the customer details below to get a prediction.")
 
-@app.get("/")
-def root():
-    return {"status": "ok"}
+    with gr.Row():
+        with gr.Column():
+            gender = gr.Dropdown(["Male", "Female"], label="Gender", value="Male")
+            partner = gr.Dropdown(["Yes", "No"], label="Partner", value="No")
+            dependents = gr.Dropdown(["Yes", "No"], label="Dependents", value="No")
+            tenure = gr.Number(label="Tenure (months)", value=1)
+            monthly_charges = gr.Number(label="Monthly Charges", value=50)
+            total_charges = gr.Number(label="Total Charges", value=50)
 
-# Request schema (same fields you collect in the UI)
-class CustomerData(BaseModel):
-    gender: str
-    Partner: str
-    Dependents: str
-    PhoneService: str
-    MultipleLines: str
-    InternetService: str
-    OnlineSecurity: str
-    OnlineBackup: str
-    DeviceProtection: str
-    TechSupport: str
-    StreamingTV: str
-    StreamingMovies: str
-    Contract: str
-    PaperlessBilling: str
-    PaymentMethod: str
-    tenure: int
-    MonthlyCharges: float
-    TotalCharges: float
+        with gr.Column():
+            phone_service = gr.Dropdown(["Yes", "No"], label="Phone Service", value="Yes")
+            multiple_lines = gr.Dropdown(["Yes", "No", "No phone service"], label="Multiple Lines", value="No")
+            internet_service = gr.Dropdown(["DSL", "Fiber optic", "No"], label="Internet Service", value="DSL")
+            online_security = gr.Dropdown(["Yes", "No", "No internet service"], label="Online Security", value="No")
+            online_backup = gr.Dropdown(["Yes", "No", "No internet service"], label="Online Backup", value="No")
+            device_protection = gr.Dropdown(["Yes", "No", "No internet service"], label="Device Protection", value="No")
+            tech_support = gr.Dropdown(["Yes", "No", "No internet service"], label="Tech Support", value="No")
+            streaming_tv = gr.Dropdown(["Yes", "No", "No internet service"], label="Streaming TV", value="No")
+            streaming_movies = gr.Dropdown(["Yes", "No", "No internet service"], label="Streaming Movies", value="No")
 
-@app.post("/predict")
-def api_predict(data: CustomerData):
-    try:
-        out = predict(data.dict())
-        return {"prediction": out}
-    except Exception as e:
-        return {"error": str(e)}
+    with gr.Row():
+        contract = gr.Dropdown(["Month-to-month", "One year", "Two year"], label="Contract", value="Month-to-month")
+        paperless_billing = gr.Dropdown(["Yes", "No"], label="Paperless Billing", value="Yes")
+        payment_method = gr.Dropdown(
+            ["Electronic check", "Mailed check", "Bank transfer (automatic)", "Credit card (automatic)"],
+            label="Payment Method", value="Electronic check"
+        )
 
-# --- Gradio UI wrappers the same predict() ---
-def gradio_interface(
-    gender, Partner, Dependents, PhoneService, MultipleLines,
-    InternetService, OnlineSecurity, OnlineBackup, DeviceProtection,
-    TechSupport, StreamingTV, StreamingMovies, Contract,
-    PaperlessBilling, PaymentMethod, tenure, MonthlyCharges, TotalCharges
-):
-    payload = {
-        "gender": gender,
-        "Partner": Partner,
-        "Dependents": Dependents,
-        "PhoneService": PhoneService,
-        "MultipleLines": MultipleLines,
-        "InternetService": InternetService,
-        "OnlineSecurity": OnlineSecurity,
-        "OnlineBackup": OnlineBackup,
-        "DeviceProtection": DeviceProtection,
-        "TechSupport": TechSupport,
-        "StreamingTV": StreamingTV,
-        "StreamingMovies": StreamingMovies,
-        "Contract": Contract,
-        "PaperlessBilling": PaperlessBilling,
-        "PaymentMethod": PaymentMethod,
-        "tenure": int(tenure),
-        "MonthlyCharges": float(MonthlyCharges),
-        "TotalCharges": float(TotalCharges),
-    }
-    out = predict(payload)
-    return str(out)
+    output_text = gr.Textbox(label="Prediction", interactive=False, placeholder="Your prediction will appear here 🌊")
+    submit_btn = gr.Button("Predict", variant="primary")
 
-demo = gr.Interface(
-    fn=gradio_interface,
-    inputs=[
-        gr.Dropdown(["Male", "Female"], label="Gender"),
-        gr.Dropdown(["Yes", "No"], label="Partner"),
-        gr.Dropdown(["Yes", "No"], label="Dependents"),
-        gr.Dropdown(["Yes", "No"], label="Phone Service"),
-        gr.Dropdown(["Yes", "No", "No phone service"], label="Multiple Lines"),
-        gr.Dropdown(["DSL", "Fiber optic", "No"], label="Internet Service"),
-        gr.Dropdown(["Yes", "No", "No internet service"], label="Online Security"),
-        gr.Dropdown(["Yes", "No", "No internet service"], label="Online Backup"),
-        gr.Dropdown(["Yes", "No", "No internet service"], label="Device Protection"),
-        gr.Dropdown(["Yes", "No", "No internet service"], label="Tech Support"),
-        gr.Dropdown(["Yes", "No", "No internet service"], label="Streaming TV"),
-        gr.Dropdown(["Yes", "No", "No internet service"], label="Streaming Movies"),
-        gr.Dropdown(["Month-to-month", "One year", "Two year"], label="Contract"),
-        gr.Dropdown(["Yes", "No"], label="Paperless Billing"),
-        gr.Dropdown(
-            ["Electronic check", "Mailed check",
-             "Bank transfer (automatic)", "Credit card (automatic)"],
-            label="Payment Method"
-        ),
-        gr.Number(label="Tenure (months)"),
-        gr.Number(label="Monthly Charges"),
-        gr.Number(label="Total Charges"),
-    ],
-    outputs="text",
-    title="Telco Churn Predictor",
-    description="Fill in the customer details to get a churn prediction.",
-)
+    submit_btn.click(
+        fn=dummy_predict,
+        inputs=[
+            gender, partner, dependents, phone_service, multiple_lines,
+            internet_service, online_security, online_backup, device_protection,
+            tech_support, streaming_tv, streaming_movies, contract,
+            paperless_billing, payment_method, tenure, monthly_charges, total_charges
+        ],
+        outputs=output_text
+    )
 
-app = gr.mount_gradio_app(app, demo, path="/ui")
+if __name__ == "__main__":
+    demo.launch(server_name="0.0.0.0", server_port=7860)

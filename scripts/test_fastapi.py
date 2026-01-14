@@ -21,7 +21,7 @@ sample_data = {
     "PaperlessBilling": "Yes",
     "PaymentMethod": "Electronic check",
     "MonthlyCharges": 80.99,
-    "TotalCharges": 389.99
+    "TotalCharges": 390.99
 }
 
 response = requests.post(url, json=sample_data)
